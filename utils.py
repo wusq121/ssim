@@ -91,7 +91,7 @@ class Audio_Reconstruct:
     """
     音频分段重构
     """
-    def __init__(self, option: Options) -> None:
+    def __init__(self) -> None:
         pass
 
     def __call__(self, audio_mono: np.ndarray, sr, feature_point, clip_mat_dct_m_mat, clip_mat_dct_l, clip_mat_dct_h):
@@ -106,6 +106,16 @@ class Audio_Reconstruct:
         audio_mono[idx: idx + len(clip)]
         return audio_mono
 
+
+class Feature_Dete:
+    """
+    音频特征点提取
+    """
+    def __init__(self) -> None:
+        pass
+
+    def __call__(self):
+        pass
 
 
 
