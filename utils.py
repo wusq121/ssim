@@ -4,6 +4,23 @@ from sympy import Matrix
 from scipy.fftpack import idct, dct
 from scipy.ndimage import gaussian_filter
 from scipy.signal import find_peaks
+import os
+import fnmatch
+
+
+def file_filter(path, ext):
+    flist = os.listdir(path)
+    all_file = []
+    for file in flist:
+        filepath = os.path.join(path, file)
+        if os.path.isdir(file):
+            all_file.extend(file_filter(filepath, ext))
+        elif fnmatch.fnmatch(filepath, '*.'+ext):
+            all_file.append(filepath)
+        else:
+            pass
+    
+    return all_file
 
 
 def crack(integer):
@@ -20,6 +37,7 @@ def is_integer(number):
         return True
     else:
         return False
+
 
 class Sequences():
     """序列生成器"""

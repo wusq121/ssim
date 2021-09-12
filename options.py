@@ -8,17 +8,22 @@ class Options:
     seed: 随即种子
     """
     def __init__(
-          self, data_dir: str, 
+          self, 
+          data_dir: str, 
+          out_dir: str,
           peaq_test_dir: str, 
           watermark_length: int, 
           sigma: int, 
           bits_per_seq: int, 
+          logfile: str,
           isCode: bool, 
           seed: int = 5) -> None:
         self.data_dir = data_dir
+        self.out_dir = out_dir,
         self.peaq_test_dir = peaq_test_dir
         self.watermark_length = watermark_length
         self.bits_per_seq = bits_per_seq
         self.isCode = isCode
         self.seed = seed
         self.sigma = sigma
+        self.logfile = logfile
