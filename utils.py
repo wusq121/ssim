@@ -125,7 +125,32 @@ class Feature_Dete:
             d[i] = y[i] - y[i - 1]
         idx, _ = find_peaks(np.abs(d), distance=self.distance)
         return idx
-        
 
 
+class Watermark:
+    def __init__(self, watermark, option: Options) -> None:
+        self.bits_per_seq = option.bits_per_seq
+        self.watermark_length = option.watermark_length
+        if type(watermark) is str:
+            self.watermark_str = watermark
+            self.watermark_np = self._str2np()
+        else:
+            self.watermark_np = watermark
+            self.watermark_str = self._np2str()
+    
 
+    def _str2np(self):
+        wmbits = []
+        for i in range(0, self.watermark_length, self.bits_per_seq):
+            if (i + self.bits_per_seq) > self.watermark_length:
+                wmbits.append(int(self.watermark_str[i:], base=2))
+            else:
+                wmbits.append(int(self.watermark_str[i: (i + self.bits_per_seq)], base=2))
+            
+            return np.array(wmbits, dtype=np.int_)
+    
+    def _np2str(self):
+        wm = ''
+        for i in self.watermark_np:
+            wm += format(i, '0b').zfill(self.bits_per_seq)
+        return wm
