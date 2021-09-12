@@ -1,8 +1,10 @@
 import numpy as np
-from numpy.linalg.linalg import norm
 from options import Options
 from sympy import Matrix
 from scipy.fftpack import idct, dct
+from scipy.ndimage import gaussian_filter
+from scipy.signal import find_peaks
+
 
 def crack(integer):
     start = int(np.sqrt(integer))
@@ -65,7 +67,7 @@ class Audio_Segment:
     """
     def __init__(self, option: Options) -> None:
         self.num_of_frag = option.watermark_length // option.bits_per_seq
-        self.frag_length = 2 ** (option.bits_per_seq)
+        self.frag_length = 2 ** (option.bits_per_seq + 1)
         self.frag_of_per_seg, self.num_of_segment = crack(self.num_of_frag)
         self.seg_length = self.frag_of_per_seg * self.frag_length * 8
         self.clip_length = self.seg_length * self.num_of_segment
@@ -111,11 +113,19 @@ class Feature_Dete:
     """
     音频特征点提取
     """
-    def __init__(self) -> None:
-        pass
+    def __init__(self, option: Options) -> None:
+        self.distance = int(2 * option.watermark_length * (2 ** (option.bits_per_seq + 4)) / option.bits_per_seq)
+        self.sigma = option.sigma
 
-    def __call__(self):
-        pass
+    def __call__(self, audio_mono):
+        y = gaussian_filter(audio_mono, sigma=self.sigma, mode='constant')
+        d = np.zeros_like(y)
+        d[0] = y[0]
+        for i in range(1, d.size):
+            d[i] = y[i] - y[i - 1]
+        idx, _ = find_peaks(np.abs(d), distance=self.distance)
+        return idx
+        
 
 
 

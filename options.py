@@ -11,6 +11,7 @@ class Options:
           self, data_dir: str, 
           peaq_test_dir: str, 
           watermark_length: int, 
+          sigma: int, 
           bits_per_seq: int, 
           isCode: bool, 
           seed: int = 5) -> None:
@@ -20,3 +21,4 @@ class Options:
         self.bits_per_seq = bits_per_seq
         self.isCode = isCode
         self.seed = seed
+        self.sigma = sigma
