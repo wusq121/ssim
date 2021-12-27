@@ -79,6 +79,37 @@ class Sequences():
         return P[:self.num, :]
 
 
+class Sequence_xiang2018():
+    """xiang2018中的序列生成器"""
+    def __init__(self, option: Options) -> None:
+        self.bits_per_seq = option.bits_per_seq
+        self.num = 2 ** self.bits_per_seq
+        self.length = 2* self.num
+        self.seed = option.seed
+    
+    def _generate(self):
+        np.random.randn(self.seed)
+        tmp = np.sign(np.random.randn(self.length))
+        np.random.seed(None)
+
+        F = np.eye(self.length, dtype=np.float_)
+        F[0, :] = tmp
+
+        P = np.zeros_like(F)
+        for i in range(len(self.length)):
+            if i == 0:
+                P[i, :] = F[i, :]
+                P[i, :] = P[i, :] / np.linalg.norm(P[i, :])
+            else:
+                temp = np.zeros(self.length)
+                for j in range(i):
+                    temp += np.dot(F[i, :], P[j, :]) * P[j, :]
+                P[i, :] = F[i, :] - temp
+                P[i, :] = P[i, :] / np.linalg.norm(P[i,:])
+        
+        return P[:self.num, :]
+        
+
 class Audio_Segment:
     """
     音频分段器方法，受全局设置影响

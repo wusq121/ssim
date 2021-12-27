@@ -18,11 +18,12 @@ class Embedder:
         self.peaq_test = option.peaq_test_dir
         self.logfile = option.logfile
 
-    def _weight(X, P):
+    def _weight(self, X):
         """
         Shape of X is n_frag * frag_length
         Shape of P is n_seq * frag_length
         """
+        P = self.P
         tmp = np.abs(np.dot(X, P.T))
         max_per_X = np.max(tmp, axis=1)
         max_per_X[max_per_X < 0.02] = 0.02
@@ -45,7 +46,7 @@ class Embedder:
             wm_t = wmbits[i, :]
             Xm_t = X_m[i, :, :]
             P_t = P[wm_t, :]
-            w = self._weight(Xm_t, P)
+            w = self._weight(Xm_t)
             sign = np.sign(np.sum(Xm_t * P_t, axis=1)).reshape(-1, 1)
             Y[i, :, :] = Xm_t + w * sign * P_t
         return Y
