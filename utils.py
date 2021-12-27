@@ -39,7 +39,7 @@ def is_integer(number):
         return False
 
 
-class Sequences():
+class Sequences:
     """序列生成器"""
     def __init__(self, option: Options) -> None:
         self.bits_per_seq = option.bits_per_seq
@@ -79,13 +79,14 @@ class Sequences():
         return P[:self.num, :]
 
 
-class Sequence_xiang2018():
+class Sequence_xiang2018:
     """xiang2018中的序列生成器"""
     def __init__(self, option: Options) -> None:
         self.bits_per_seq = option.bits_per_seq
         self.num = 2 ** self.bits_per_seq
         self.length = 2* self.num
         self.seed = option.seed
+        self.P = self._generate()
     
     def _generate(self):
         np.random.randn(self.seed)
@@ -106,9 +107,27 @@ class Sequence_xiang2018():
                     temp += np.dot(F[i, :], P[j, :]) * P[j, :]
                 P[i, :] = F[i, :] - temp
                 P[i, :] = P[i, :] / np.linalg.norm(P[i,:])
-        
         return P[:self.num, :]
+
+class Sequences_xiang2015:
+    """xiang2015中的序列生成器"""
+    def __init__(self, option: Options) -> None:
+        self.bits_per_seq = option.bits_per_seq
+        self.num = 2 ** self.bits_per_seq
+        self.length = 2 * self.num
+        self.seed = option.seed
+        self.P = self._generate()
+
+    def _generate(self):
+        np.random.randn(self.seed)
+        tmp = np.sign(np.random.randn(self.length))
+        np.random.seed(None)
+
+        mat = np.zeros([self.length, self.length])
+        for i in range(self.length):
+            mat[i, :] = np.roll(tmp, i)
         
+        return mat[:self.num, :]
 
 class Audio_Segment:
     """
