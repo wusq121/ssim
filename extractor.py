@@ -14,6 +14,7 @@ class Extractor:
         self.data_dir = option.out_dir
         self.logfile = option.logfile
 
+
     def _wm_extract(self, Y_m):
 
         """
@@ -45,4 +46,4 @@ class Extractor:
                 wm[i, j] = tu[-1][1]
         return wm
     
-    def extract_st(self, )
+    def extract_mono(self, audio, sr):
