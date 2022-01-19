@@ -52,6 +52,9 @@ class Embedder:
         return Y
     
     def outfilename(self, inputfilename):
+        """
+        根据输入信号的文件名给出
+        """
         basename = os.path.basename(inputfilename)
         filename, ext = os.path.splitext(basename)
         outfile_em = os.path.join(self.out_dir, basename)
